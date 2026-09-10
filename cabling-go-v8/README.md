@@ -98,7 +98,7 @@ connections:
     speed: 800G       # omit breakout (or set 1) for a native, unbroken link
   - from: t2
     to: t3
-    speed: 800Ga
+    speed: 800G
 ```
 
 ### Naming fields (`name_format`)
