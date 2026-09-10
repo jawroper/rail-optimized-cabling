@@ -3,7 +3,7 @@
 Generates a cabling assignment CSV file for a 3-stage and/or 5-stage topology with the server to leaf connections being rail-optimized. If a 5-stage, use the tool
 to generate a PoD at a time.
 
-The tool can create cabling that complies with Apstra cabling format and is 
+The tool can create cabling that complies with Apstra cabling format and is
 flexible enough to use user defined naming for the switches and servers.
 
 It is YAML driven.
@@ -98,7 +98,7 @@ connections:
     speed: 800G       # omit breakout (or set 1) for a native, unbroken link
   - from: t2
     to: t3
-    speed: 800G
+    speed: 800Ga
 ```
 
 ### Naming fields (`name_format`)
