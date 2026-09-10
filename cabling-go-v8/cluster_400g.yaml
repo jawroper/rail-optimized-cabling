@@ -1,0 +1,39 @@
+# Same topology as cluster_800g.yaml, but T1->T2 and T2->T3 uplinks use
+# 2x400G breakout legs to the same neighbor instead of one native 800G link.
+ports_per_switch: 64
+interface_prefix: "et-0/0/"
+
+layers:
+  - name: server
+    display_name: Server
+    count: 372
+    rails: 8
+    rack_size: 12
+  - name: t1
+    display_name: Leaf
+    name_format: "T1_Rail_%02d_Leaf_%02d_PoD_%02d"
+    striping:
+      nodes_per_stripe: 62
+  - name: t2
+    display_name: Spine
+    name_format: "T2_Spine_%02d_PoD_%02d"
+    count: 32
+  - name: t3
+    display_name: Super-Spine
+    name_format: "T3_Super_Spine_%02d"
+    count: 16
+    shared: true
+
+connections:
+  - from: server
+    to: t1
+    speed: 400G
+    breakout: 2
+  - from: t1
+    to: t2
+    speed: 400G
+    breakout: 2
+  - from: t2
+    to: t3
+    speed: 400G
+    breakout: 2

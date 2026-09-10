@@ -1,0 +1,50 @@
+# Rail-optimized 3-tier cluster topology, matching the Apstra-style naming:
+#   spine{pod}_{plane}_{idx}   e.g. spine001_001_01
+#   sspine{plane}_{idx}        e.g. sspine001_01   (shared, no pod)
+#   leaf{pod}_{stripe}_{rail}  e.g. leaf001_001_1
+#   sys{pod}_{stripe}_{local}  e.g. sys001_001_001
+#
+# There is only one plane in this topology (plane 001) -- the `plane: 1`
+# lines below are there to show how it's set, since planes default to 1
+# even if omitted. A future multi-plane topology would just set a
+# different value per spine/superspine layer.
+ports_per_switch: 64
+interface_prefix: "et-0/0/"
+
+layers:
+  - name: server
+    display_name: Server
+    count: 372
+    rails: 8
+    rack_size: 12
+    name_format: "sys%(pod)03d_%(stripe1)03d_%(local1)03d"
+  - name: t1
+    display_name: Leaf
+    name_format: "leaf%(pod)03d_%(stripe1)03d_%(rail1)d"
+    striping:
+      nodes_per_stripe: 62
+  - name: t2
+    display_name: Spine
+    name_format: "spine%(pod)03d_%(plane)03d_%(idx1)02d"
+    plane: 1
+    count: 32
+  - name: t3
+    display_name: Super-Spine
+    name_format: "sspine%(plane)03d_%(idx1)02d"
+    plane: 1
+    count: 16
+    shared: true
+
+connections:
+  - from: server
+    to: t1
+    speed: 400G
+    breakout: 2
+  - from: t1
+    to: t2
+    speed: 400G
+    breakout: 2
+  - from: t2
+    to: t3
+    speed: 400G
+    breakout: 2
